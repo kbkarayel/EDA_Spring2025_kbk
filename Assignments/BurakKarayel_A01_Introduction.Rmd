@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Kamil Burak Karayel"
 output: pdf_document
 ---
 
@@ -22,15 +22,15 @@ Enter answers to the questions just below the >Answer: prompt.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I took a course in my institution. However it was not useful, because I missed lots of classes.
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: There is not a specific component. Although I don't use it in my professional business life, I got some coding classes in the engineering school. So I hope to be successful.  
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: I can say I'm a little bit nervous about the workload in the semester because of R and my Master's Project.
 
 
 ## 2) GitHub
