@@ -32,11 +32,21 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 
 ```{r basics 1}
 #1. 
-
+seq1to55by5 <- seq(1, 55, 5) # create new sequence from 1 to 55, increment by 5
+seq1to55by5
 #2. 
-
+mean_seq1to55by5 <- mean(seq1to55by5) # calculate mean of this new sequence
+mean_seq1to55by5
+median_seq1to55by5 <- median(seq1to55by5) # calculate the median of this new sequence
+median_seq1to55by5
 #3. 
-
+results <- c("mean>median","mean=median","mean<median") # create a vector to call the result from possibilities
+result <- if(mean_seq1to55by5 > median_seq1to55by5) { #if mean>median then assign "mean>median" to 'result' object
+  results[1]
+  } else if(mean_seq1to55by5 < median_seq1to55by5) { #if mean<median then assign "mean<median" to 'result' object
+  results[3]
+  } else {results[2]} #if mean=median then assign "mean=median" to 'result' object
+result
 ```
 
 ## Basics, Part 2
@@ -50,13 +60,29 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
-
-
+#5
+vectornames <- c("studentAAA", "studentBBB", "studentCCC", "studentDDD") #type=character
+vectorscores <- c(45,55,65,75) #type=numeric
+vectorscholarship <- c(TRUE,FALSE,FALSE,TRUE) #type=logical
+#6
+#Labeled in #5
+#7 option1
+df_namescorescholarship <- data.frame("names"=vectornames,"scores"=vectorscores,"scholarship"=vectorscholarship) #create a new data frame with three vectors named names,scores,scholarship
+df_namescorescholarship
+#7 option2
+df_name <- as.data.frame(vectornames)
+df_score <- as.data.frame(vectorscores)
+df_scholar <- as.data.frame(vectorscholarship)
+df_opt2 <- cbind(df_name,df_score,df_scholar)
+class(df_opt2)
+df_opt2
+#8
+#Labeled as names, scores, scholarship
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer:
+> Answer: Matrix includes same type of elements, Data Frame includes different vector types.
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
@@ -68,21 +94,30 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 
 ```{r basics 3}
 #10. Create a function using if...else
-
+passXfail <- function(x) { #create a new function named passXfail
+  if (x>50) examresult <- "Pass" #if the entry in the function is greater than 50 then assign "Pass" to examresult object
+  else examresult <- "Fail" #otherwise assign "Fail" to examresult object
+  return(examresult)
+}
 #11. Create a function using ifelse()
-
+passXfail_opt2 <- function(x) { #create a new function named passXfail_opt2 as a second option
+  examresult <- ifelse(x>50, "Pass", "Fail") #if the entry in the function is greater than 50 then assign "Pass" otherwise "Fail" to examresult object.
+  return(examresult)
+}
 #12a. Run the first function with the value 52.5
-
+passXfail(52.5) #Results "Pass" as expected.
 #12b. Run the second function with the value 52.5
-
+passXfail_opt2(52.5) #Results "Pass" as expected.
 #13a. Run the first function with the vector of test scores
-
+#> passXfail(vectorscores)
+#I got an error because the condition (vectorscores) has length > 1)
 #13b. Run the second function with the vector of test scores
+passXfail_opt2(vectorscores) #It worked! I got "Fail" "Pass" "Pass" "Pass"
 ```
 
 14. QUESTION: Which option of `if`...`else` vs. `ifelse` worked? Why? (Hint: search the web for "R vectorization")
 
-> Answer:
+> Answer: 'if'...'else' function checks only one condition and can't work properly with vectors. However 'ifelse' is compatible with vectors and checks every element in the vector and results a vector again.
 
 
 **NOTE** Before knitting, you'll need to comment out the call to the function in Q13 that does not work. (A document can't knit if the code it contains causes an error!)
