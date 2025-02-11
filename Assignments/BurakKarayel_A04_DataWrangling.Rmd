@@ -73,30 +73,52 @@ glimpse(EPAair.PM25.NC2019)
 
 ```{r questions 3 thru 4}
 #3
-EPAair.O3.NC2018$Date <- as.Date(EPAair.O3.NC2018$Date, format = "%m/%d/%Y") #Change vector type of column "Date" from Factor to Date
-EPAair.O3.NC2019$Date <- as.Date(EPAair.O3.NC2019$Date, format = "%m/%d/%Y") #Change vector type of column "Date" from Factor to Date
-EPAair.PM25.NC2018$Date <- as.Date(EPAair.PM25.NC2018$Date, format = "%m/%d/%Y") #Change vector type of column "Date" from Factor to Date
-EPAair.PM25.NC2019$Date <- as.Date(EPAair.PM25.NC2019$Date, format = "%m/%d/%Y") #Change vector type of column "Date" from Factor to Date
+EPAair.O3.NC2018$Date <- as.Date(EPAair.O3.NC2018$Date, format = "%m/%d/%Y") 
+#Change vector type of column "Date" from Factor to Date
+EPAair.O3.NC2019$Date <- as.Date(EPAair.O3.NC2019$Date, format = "%m/%d/%Y") 
+#Change vector type of column "Date" from Factor to Date
+EPAair.PM25.NC2018$Date <- as.Date(EPAair.PM25.NC2018$Date, format = "%m/%d/%Y") 
+#Change vector type of column "Date" from Factor to Date
+EPAair.PM25.NC2019$Date <- as.Date(EPAair.PM25.NC2019$Date, format = "%m/%d/%Y") 
+#Change vector type of column "Date" from Factor to Date
 
 #4
-Q4.EPAair.O3.NC2018 <- EPAair.O3.NC2018 %>% select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE) #Seven columns selected from EPAair.O3.NC2018 and a ne dataframe created.
+Q4.EPAair.O3.NC2018 <- EPAair.O3.NC2018 %>% 
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE) 
+#Seven columns selected from EPAair.O3.NC2018 and a ne dataframe created.
 
-Q4.EPAair.O3.NC2019 <- EPAair.O3.NC2019 %>% select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE) #Seven columns selected from EPAair.O3.NC2019 and a ne dataframe created.
+Q4.EPAair.O3.NC2019 <- EPAair.O3.NC2019 %>% 
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE) 
+#Seven columns selected from EPAair.O3.NC2019 and a ne dataframe created.
 
-Q4.EPAair.PM25.NC2018 <- EPAair.PM25.NC2018 %>% select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE) #Seven columns selected from EPAair.PM25.NC2018 and a ne dataframe created.
+Q4.EPAair.PM25.NC2018 <- EPAair.PM25.NC2018 %>% 
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE) 
+#Seven columns selected from EPAair.PM25.NC2018 and a ne dataframe created.
 
-Q4.EPAair.PM25.NC2019 <- EPAair.PM25.NC2019 %>% select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE) #Seven columns selected from EPAair.PM25.NC2019 and a ne dataframe created.
+Q4.EPAair.PM25.NC2019 <- EPAair.PM25.NC2019 %>% 
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE) 
+#Seven columns selected from EPAair.PM25.NC2019 and a ne dataframe created.
 
 #5
-Q5.EPAair.PM25.NC2018 <- Q4.EPAair.PM25.NC2018 %>% mutate(AQS_PARAMETER_DESC = "PM2.5") #Because it is a PM2.5 dataset, all AQS_PARAMETER_DESC cells are changed with "PM2.5"
+Q5.EPAair.PM25.NC2018 <- Q4.EPAair.PM25.NC2018 %>% mutate(AQS_PARAMETER_DESC = "PM2.5") 
+#Because it is a PM2.5 dataset, all AQS_PARAMETER_DESC cells are changed with "PM2.5"
 
-Q5.EPAair.PM25.NC2019 <- Q4.EPAair.PM25.NC2019 %>% mutate(AQS_PARAMETER_DESC = "PM2.5") #Because it is a PM2.5 dataset, all AQS_PARAMETER_DESC cells are changed with "PM2.5"
+Q5.EPAair.PM25.NC2019 <- Q4.EPAair.PM25.NC2019 %>% mutate(AQS_PARAMETER_DESC = "PM2.5") 
+#Because it is a PM2.5 dataset, all AQS_PARAMETER_DESC cells are changed with "PM2.5"
 
 #6
-write.csv(Q4.EPAair.O3.NC2018, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2018_Processed.csv")
-write.csv(Q4.EPAair.O3.NC2019, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2019_Processed.csv")
-write.csv(Q5.EPAair.PM25.NC2018, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2018_Processed.csv")
-write.csv(Q5.EPAair.PM25.NC2019, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2019_Processed.csv")
+write.csv(Q4.EPAair.O3.NC2018, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_NC2018_Processed.csv")
+write.csv(Q4.EPAair.O3.NC2019, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_NC2019_Processed.csv")
+write.csv(Q5.EPAair.PM25.NC2018, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_PM25_NC2018_Processed.csv")
+write.csv(Q5.EPAair.PM25.NC2019, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_PM25_NC2019_Processed.csv")
 
 ```
 
@@ -131,7 +153,7 @@ write.csv(Q5.EPAair.PM25.NC2019, row.names = FALSE, file = "./Data/Processed/EPA
 ```{r questions 7 thru 11}
 #7 
 Q7 <- rbind(Q4.EPAair.O3.NC2018, Q4.EPAair.O3.NC2019, Q5.EPAair.PM25.NC2018, Q5.EPAair.PM25.NC2019)
-#Four datasets from Q4 and Q5 are merged by rbind. Rows are added to 37893, column number is same as 7.
+#Four datasets from Q4 and Q5 are merged by rbind. Rows reached to 37893, column number is same as 7.
 
 #8 
 common_sites_O3 <- intersect(Q4.EPAair.O3.NC2018$Site.Name, Q4.EPAair.O3.NC2019$Site.Name) 
@@ -142,7 +164,8 @@ common_sites <- intersect(common_sites_O3, common_sites_PM25)
 #common sites from all four datasets.
 
 Q7$Site.Name[Q7$Site.Name == ""] <- NA #Change "" values in Site.Name column to NA.
-Q8_v1 <- Q7 %>% filter(Site.Name %in% c(common_sites)) %>% drop_na(Site.Name) #Take only sites that are included in common_sites and drop missing values.
+Q8_v1 <- Q7 %>% filter(Site.Name %in% c(common_sites)) %>% drop_na(Site.Name) 
+#Take only sites that are included in common_sites and drop missing values.
 
 Q8_v2 <- Q8_v1 %>%
    group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
@@ -152,16 +175,20 @@ Q8_v2 <- Q8_v1 %>%
          Mean_Longitude = mean(SITE_LONGITUDE, na.rm = TRUE)
    )
 
-Q8_v3 <- Q8_v2 %>% mutate(Month = month(Date), Year = year(Date)) #Add year and month columns from "Date" column by using Lubridate functions month and year.
+Q8_v3 <- Q8_v2 %>% mutate(Month = month(Date), Year = year(Date)) 
+#Add year and month columns from "Date" column by using Lubridate functions month and year.
 
 #9
-Q9 <- pivot_wider(Q8_v3, names_from = AQS_PARAMETER_DESC, values_from = Mean_AQI) #Create new columns as PM2.5 and Ozone (from AQS_PARAMETER_DESC) and write AQI values in the cells. 
+Q9 <- pivot_wider(Q8_v3, names_from = AQS_PARAMETER_DESC, values_from = Mean_AQI) 
+#Create new columns as PM2.5 and Ozone (from AQS_PARAMETER_DESC) and write AQI values in the cells. 
 
 #10
-dim(Q9) #8976 rows and 9 columns. Two columns disappeared and two new columns added in Question 9.
+dim(Q9) 
+#8976 rows and 9 columns. Two columns disappeared and two new columns added in Question 9.
 
 #11
-write.csv(Q9, row.names = FALSE, file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+write.csv(Q9, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 
 ```
 
@@ -175,7 +202,8 @@ write.csv(Q9, row.names = FALSE, file = "./Data/Processed/EPAair_O3_PM25_NC1819_
 ```{r questions 12 and 13}
 
 #12
-Q12 <- Q9 %>% group_by(Site.Name, Month, Year) %>% #Group the rows by these column values and take average value for AQI values. 
+Q12 <- Q9 %>% group_by(Site.Name, Month, Year) %>% 
+  #Group the rows by these column values and take average value for AQI values. 
   summarize(mean_Ozone_AQI = mean(Ozone, na.rm = TRUE),
             mean_PM25_AQI = mean(PM2.5, na.rm = TRUE)) %>% 
   drop_na(mean_Ozone_AQI)
