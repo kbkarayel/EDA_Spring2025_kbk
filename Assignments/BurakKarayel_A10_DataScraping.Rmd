@@ -27,8 +27,16 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 
 ```{r 1. Project Setup, message = FALSE}
 #1 
+library(tidyverse)
+#install.packages("rvest")
+library(rvest)
+library(here)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
 
-
+getwd()
+here()
 ```
 
 2. We will be scraping data from the NC DEQs Local Water Supply Planning website, specifically the Durham's 2024 Municipal Local Water Supply Plan (LWSP): 
@@ -40,6 +48,8 @@ Indicate this website as the as the URL to be scraped. (In other words, read the
 
 ```{r set.the.scraping.website}
 #2 
+#indicate the webpage to be scraped
+Durham_LSWP_Page <- read_html("https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=03-32-010&year=2024")
 
 ```
 
@@ -59,6 +69,29 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3 
+#get water system name from the page
+Water_System <- Durham_LSWP_Page %>%
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>%
+  html_text()
+Water_System
+
+#get ID number from the page
+PWSID <- Durham_LSWP_Page %>%
+ html_nodes("td tr:nth-child(1) td:nth-child(5)") %>%
+ html_text()
+PWSID
+
+#get owner data from the page
+Ownership <- Durham_LSWP_Page %>%
+ html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>%
+ html_text()
+Ownership
+
+#get monthly usage data from the page
+MaximumDayUse_MGD <- Durham_LSWP_Page %>%
+ html_nodes("th~ td+ td") %>%
+ html_text()
+MaximumDayUse_MGD
 
 
 ```
@@ -74,10 +107,25 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r create.a.dataframe.from.scraped.data}
 #4 
+#create a dataframe consists of 7 columns
+Q4_df <- data.frame("Water System" = rep(Water_System,12), #repeat water system name 12 times
+                    "Owner" = rep(Ownership,12),
+                    "PWSID" = rep(PWSID,12),
+                    "Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), #create a new column by the order in website
+                    "Year" = rep(2024,12),
+                    "MaxDayUse_MGD" = as.numeric(MaximumDayUse_MGD)) %>%
+  mutate(Date = my(paste(Month,"-",Year))) %>%  #create a new column consists of Month and Year data
+  dplyr::arrange(Month)  #arrange the month column 1 to 12
 
 
 #5 
+Q5_plot <- ggplot(Q4_df, aes(x=Month, y=MaxDayUse_MGD, group=1)) +
+  geom_line() +
+   scale_x_continuous(breaks = 1:12) +
+  labs(title="Durham Maximum Day Use (MGD) in 2024",
+       y="")
 
+Q5_plot  
 
 ```
 
@@ -90,6 +138,40 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r construct.a.scraping.function}
 #6. 
+#create a function for two variables
+Q6_function <- function(the_pwsid, the_year) {
+  
+  #create website by using variables given by function
+  Q6_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', 
+                                  the_pwsid, '&year=', the_year))
+  
+  Water_System <- Q6_website %>%  #get water system name from the created website 
+    html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>%
+    html_text()
+    
+  PWSID <- Q6_website %>%
+    html_nodes("td tr:nth-child(1) td:nth-child(5)")%>%
+    html_text()
+  
+  Ownership <- Q6_website %>%
+    html_nodes("div+ table tr:nth-child(2) td:nth-child(4)")%>%
+    html_text()
+  
+  MaximumDayUse_MGD <- Q6_website %>%
+    html_nodes("th~ td+ td")%>%
+    html_text
+  
+  Q6_df <- data.frame("Water_System" = rep(Water_System,12),
+                    "Owner" = rep(Ownership,12),
+                    "PWSID" = rep(the_pwsid,12),  #use the given variable 
+                    "Month" = c(1,5,9,2,6,10,3,7,11,4,8,12),
+                    "Year" = rep(the_year,12),   #use the given variable
+                    "MaxDayUse_MGD" = as.numeric(MaximumDayUse_MGD)) %>%
+  mutate(Date = my(paste(Month,"-",Year))) %>%
+  dplyr::arrange(Month)
+  
+  return(Q6_df)
+}
 
 
 ```
@@ -98,7 +180,16 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Durham.2020.data}
 #7 
+#create a new dataframe for Durham in 2020
+Q7_df <- Q6_function('03-32-010', 2020)
 
+Q7_plot <- ggplot(Q7_df, aes(x=Month, y=MaxDayUse_MGD, group=1)) +
+  geom_line() +
+   scale_x_continuous(breaks = 1:12) +
+  labs(title="Durham Maximum Day Use (MGD) in 2020",
+       y="")
+
+Q7_plot
 
 ```
 
@@ -106,6 +197,23 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Asheville.2020.data}
 #8 
+#create a new dataframe for Asheville in 2020
+Q8_Asheville <- Q6_function('01-11-010', 2020)
+
+#merge two dataframes of Durham and Asheville
+Q8_combined <- bind_rows(Q8_Asheville, Q7_df)
+
+Q8_plot <- ggplot(Q8_combined, aes(x=Q8_combined$Month, y=Q8_combined$MaxDayUse_MGD, color=Q8_combined$Water_System)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:12) +
+  labs(title="Comparison of Maximum Day Use (MGD) in 2020",
+       subtitle = "Asheville vs. Durham", 
+       y="",
+       color="Water System") +
+   scale_color_manual(values = c("Asheville" = "green", "Durham" = "orange"))
+
+Q8_plot
+
 
 
 ```
@@ -117,10 +225,22 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Asheville.multiyear.data }
 #9 
+#use map2 for the function created in Q6 with two variables; ID of Asheville, years from 2018 to 2023  
+Q9_df <- map2('01-11-010', 2018:2023, Q6_function) %>% bind_rows()
 
+Q9_plot <- ggplot(Q9_df, aes(x=Date, y=MaxDayUse_MGD, group=1)) +
+  geom_line() +
+  geom_smooth(method = 'loess') +
+  labs(title="Asheville Monthly Maximum Day Use (MGD) 2028-2023",
+       x="Years",
+       y="") +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")
+
+Q9_plot
 
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
-> Answer:
+> Answer: Just by looking at the plot we can say that Asheville’s water usage has a slight upward
+ trend over the period from 2018 to 2023
 >
